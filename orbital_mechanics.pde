@@ -76,6 +76,8 @@ class Button extends GUIComp {
         v0[0] = 2 * sliderMax * ( ((Slider)comp).value - 0.5 );
       } else if (comp.id == "Slider" && ((Slider)comp).sliderID == "InitialVY") {
         v0[1] = 2 * sliderMax * ( ((Slider)comp).value - 0.5 );
+      } else if (comp.id == "Slider" && ((Slider)comp).sliderID == "MassAdjust") {
+         centerMass = (float)Math.pow(10.0, 5.0 + 4.0 * ((Slider)comp).value);
       }
     }
     mass.x = x0; mass.y = y0;
@@ -131,6 +133,7 @@ class Slider extends GUIComp {
   public String sliderID;
   public SliderBlock block;
   public char direction;
+  public int colour[] = {0, 100, 0};
   public Slider(float x, float y, float w, float h, char direction) {
     super(x,y,w,h);
     id = "Slider";
@@ -212,6 +215,13 @@ void setup() {
   ((Slider)gui.get(1)).addSlider(gui);
   ((Slider)gui.get(1)).setValue(0.5);
   
+  Slider massAdjust = new Slider(380, 550, 300, 10, 'x');
+  gui.add(massAdjust);
+  massAdjust.addSlider(gui);
+  massAdjust.sliderID = "MassAdjust";
+  massAdjust.colour[0] = 100; massAdjust.colour[1] = 50; massAdjust.colour[2] = 0;
+  massAdjust.setValue(0.5);
+  
   Slider scroller = new Slider(935, 205, 10, 300, 'y');
   scroller.sliderID = "InitialVY";
   gui.add(scroller);
@@ -267,7 +277,8 @@ void guiDraw() {
       text(butt.text,butt.x + 4 , butt.y + 25);
     } 
     if (comp.id == "Slider") {
-      fill(0, 100, 0);
+      Slider slider = (Slider)comp;
+      fill(slider.colour[0], slider.colour[1], slider.colour[2]);
       strokeWeight(2);
       rect(comp.x, comp.y, comp.w, comp.h);
     } 
